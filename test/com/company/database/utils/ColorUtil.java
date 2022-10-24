@@ -1,5 +1,8 @@
 package com.company.database.utils;
 
+/**
+ * Contains colors to print logs in better and effective ways.
+ */
 public class ColorUtil {
         // Reset
         public static final String RESET = "\033[0m";  // Text Reset

@@ -5,6 +5,9 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Contains Utility methods for logger.
+ */
 public class LoggerUtil {
 
     public static Logger getLogger(String name){
