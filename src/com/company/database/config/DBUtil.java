@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * Contains different ways of connection to database.
+ */
 public class DBUtil {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/jdbc?useSSL=false&allowPublicKeyRetrieval=true";
     private static final String USERNAME = "root";

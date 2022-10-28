@@ -13,11 +13,15 @@ import java.util.logging.Logger;
 
 import static java.util.Arrays.stream;
 
+/**
+ * This is the main class to test all the test cases.
+ */
 
 public class ApplicationTest {
     private static Map<String, String> loadClasses(){
         Map<String, String> map = new HashMap<>();
         map.put("DBUtil", "com.company.database.config.DBUtilTest");
+        map.put("GenericDao","com.company.database.dao.GenericDaoImplTest");
         return map;
     }
 
