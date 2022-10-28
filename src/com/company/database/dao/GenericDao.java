@@ -58,7 +58,7 @@ public class GenericDao {
         return batchList;
     }
 
-    public void closeConnection(){
+    protected void closeConnection(){
         if(connection != null){
             try {
                 connection.close();

@@ -1,7 +1,8 @@
 package com.company.database.dao;
 
 import com.company.database.annotation.Table;
-import com.company.database.convertor.Convertor;
+import com.company.database.convertor.ConversionFactory;
+import com.company.database.convertor.MySqlDaoConvertor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
@@ -10,6 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class GenericDaoImpl<E> extends GenericDao implements BasicDao{
 
@@ -20,10 +22,10 @@ public class GenericDaoImpl<E> extends GenericDao implements BasicDao{
             resultSet = state.executeQuery(sqlQuery);
             if(resultSet.next()){
                 closeConnection();
-                return Convertor.getClass(resultSet, tClass);
+                return Objects.requireNonNull(ConversionFactory.getConvertor("mySqlDaoConvertor")).getClass(resultSet, tClass);
             }
 
-        } catch (SQLException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
+        } catch (SQLException | InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
             e.printStackTrace();
         }
         closeConnection();
@@ -40,7 +42,7 @@ public class GenericDaoImpl<E> extends GenericDao implements BasicDao{
                 resultSet = state.executeQuery(sqlQuery);
                 records.addAll(populateResult(new ArrayList<>(), resultSet, tClass));
             }
-        } catch (SQLException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
+        } catch (SQLException | InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
             e.printStackTrace();
         }
         closeConnection();
@@ -53,9 +55,8 @@ public class GenericDaoImpl<E> extends GenericDao implements BasicDao{
         try(Statement state = getStatement()) {
             String sqlQuery = SELECT_ALL_FROM + getTable(tClass) + " LIMIT " + pageNumber + "," + numberOfRecords;
             resultSet = state.executeQuery(sqlQuery);
-            closeConnection();
            return populateResult(records, resultSet, tClass);
-        } catch (SQLException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
+        } catch (SQLException | InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
             e.printStackTrace();
         }
         closeConnection();
@@ -113,10 +114,10 @@ public class GenericDaoImpl<E> extends GenericDao implements BasicDao{
     }
 
     private List<E> populateResult(List<E> records, ResultSet resultSet, Class<E> tClass)
-            throws SQLException, ClassNotFoundException, InvocationTargetException, IllegalAccessException {
+            throws SQLException, ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
 
         while(resultSet.next()){
-            records.add(Convertor.getClass(resultSet, tClass));
+            records.add(Objects.requireNonNull(ConversionFactory.getConvertor("mySqlDaoConvertor")).getClass(resultSet, tClass));
         }
 
         return records;

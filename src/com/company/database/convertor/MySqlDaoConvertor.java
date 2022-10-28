@@ -1,5 +1,7 @@
 package com.company.database.convertor;
 
+import com.company.database.annotation.BeanName;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -8,11 +10,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Convertor {
+@BeanName(name = "mysqlDao")
+public class MySqlDaoConvertor implements DaoConvertor {
 
-    private Convertor(){}
+    private MySqlDaoConvertor(){}
 
-    public static <T> T getClass(ResultSet resultSet, Class<T> clazz) throws SQLException, InvocationTargetException, IllegalAccessException, ClassNotFoundException {
+    @Override
+    public <T> T getClass(ResultSet resultSet, Class<T> clazz) throws SQLException, InvocationTargetException, IllegalAccessException, ClassNotFoundException {
         T dynamicClass = null;
         try {
            dynamicClass = clazz.getConstructor().newInstance();
@@ -34,7 +38,8 @@ public class Convertor {
         return dynamicClass;
     }
 
-    private static String generateMethodFromColumn(String columnName) {
+    @Override
+    public String generateMethodFromColumn(String columnName) {
         String[] strSplit = columnName.split("_");
         StringBuilder sb = new StringBuilder("set")
                 .append(generateMethodByPart(strSplit[0]));
